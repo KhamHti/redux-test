@@ -1,24 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { Button, Grid, Header, Input } from "semantic-ui-react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  increase,
+  decrease,
+  reset,
+  incrementByAmount,
+} from "./features/counter/counterSlice";
 
 function App() {
+  const [incrementAmount, setIncrementAmount] = useState("2");
+  const { count } = useSelector((store) => store.counter);
+  // console.log(count);
+  const dispatch = useDispatch();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Grid centered padded columns={4}>
+      <Grid.Row verticalAlign="middle">
+        <Grid.Row textAlign="center">
+          <Header size="huge">Count: {count}</Header>
+          <Button onClick={() => dispatch(increase())}>Increase +</Button>
+          <Button onClick={() => dispatch(decrease())}>Decrease -</Button>
+          <Button onClick={() => dispatch(reset())}>Reset</Button>
+        </Grid.Row>
+      </Grid.Row>
+      <Input
+        placeholder="add random number"
+        value={incrementAmount}
+        onChange={(e) => setIncrementAmount(e.target.value)}
+      />
+      <Button
+        onClick={() =>
+          dispatch(incrementByAmount(Number(incrementAmount) || 0))
+        }
+      >
+        Add
+      </Button>
+    </Grid>
   );
 }
 
